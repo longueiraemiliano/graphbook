@@ -2,14 +2,14 @@ import React, { Component } from "react";
 
 export default class UserBar extends Component {
   render() {
-    const { user } = this.props;
+    const { currentUser } = this.props;
 
-    if (!user) return null;
+    if (!currentUser) return null;
 
     return (
       <div className="user">
-        <img src={user.avatar} />
-        <span>{user.username}</span>
+        <img src={currentUser.avatar} />
+        <span>{currentUser.username}</span>
       </div>
     );
   }

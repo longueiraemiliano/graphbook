@@ -4,3 +4,4 @@ combined.log
 error.log
 .vscode
 src/server/config/index.js
+.jwt_secret

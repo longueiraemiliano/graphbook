@@ -1,5 +1,8 @@
 import logger from "../../helpers/logger";
 import Sequelize from "sequelize";
+import bcrypt from "bcrypt";
+import JWT from "jsonwebtoken";
+const { JWT_SECRET } = process.env;
 
 function resolvers() {
   const { db } = this;
@@ -40,25 +43,17 @@ function resolvers() {
         return Post.findAll({ order: [["createdAt", "DESC"]] });
       },
       chats(root, args, context) {
-        return User.findAll().then(users => {
-          if (!users.length) {
-            return [];
-          }
-
-          const usersRow = users[0];
-
-          return Chat.findAll({
-            include: [
-              {
-                model: User,
-                required: true,
-                through: { where: { userId: usersRow.id } }
-              },
-              {
-                model: Message
-              }
-            ]
-          });
+        return Chat.findAll({
+          include: [
+            {
+              model: User,
+              required: true,
+              through: { where: { userId: context.user.id } }
+            },
+            {
+              model: Message
+            }
+          ]
         });
       },
       chat(root, { chatId }, context) {
@@ -125,6 +120,9 @@ function resolvers() {
         return {
           users: User.findAll(query)
         };
+      },
+      currentUser(root, args, context) {
+        return context.user;
       }
     },
     RootMutation: {
@@ -227,6 +225,60 @@ function resolvers() {
             });
           }
         );
+      },
+      login(root, { email, password }, context) {
+        return User.findAll({
+          where: {
+            email
+          },
+          raw: true
+        }).then(async users => {
+          if ((users.length = 1)) {
+            const user = users[0];
+            const passwordValid = await bcrypt.compare(password, user.password);
+            if (!passwordValid) {
+              throw new Error("Password does not match");
+            }
+
+            const token = JWT.sign({ email, id: user.id }, JWT_SECRET, {
+              expiresIn: "1d"
+            });
+
+            return {
+              token
+            };
+          } else {
+            throw new Error("User not found");
+          }
+        });
+      },
+      signup(root, { email, password, username }, context) {
+        return User.findAll({
+          where: {
+            [Op.or]: [{ email }, { username }]
+          },
+          raw: true
+        }).then(async users => {
+          if (users.length) {
+            throw new Error("User already exists");
+          } else {
+            return bcrypt.hash(password, 10).then(hash => {
+              return User.create({
+                email,
+                password: hash,
+                username,
+                activated: 1
+              }).then(newUser => {
+                const token = JWT.sign({ email, id: newUser.id }, JWT_SECRET, {
+                  expiresIn: "1d"
+                });
+                return {
+                  token
+                };
+              });
+            });
+          }
+        });
       }
     }
   };

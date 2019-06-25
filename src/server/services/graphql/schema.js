@@ -1,4 +1,6 @@
 const typeDefinitions = `
+  directive @auth on QUERY | FIELD_DEFINITION | FIELD
+
   type Post {
     id: Int
     text: String
@@ -37,6 +39,10 @@ const typeDefinitions = `
     users: [User]
   }
 
+  type Auth {
+    token: String
+  }
+
   input PostInput {
     text: String!
   }
@@ -72,14 +78,24 @@ const typeDefinitions = `
     deletePost (
       postId: Int!
     ): Response
+    login (
+      email: String!
+      password: String!
+    ): Auth
+    signup (
+      username: String!
+      email: String!
+      password: String!
+    ): Auth
   }
 
   type RootQuery {
     posts: [Post]
-    chats: [Chat]
+    chats: [Chat] @auth
     chat(chatId: Int): Chat
-    postsFeed(page: Int, limit: Int): PostFeed
+    postsFeed(page: Int, limit: Int): PostFeed @auth
     usersSearch(page: Int, limit: Int, text: String!): UsersSearch
+    currentUser: User @auth
   }
 
   schema {
