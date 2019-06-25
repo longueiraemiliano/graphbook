@@ -1,0 +1,6 @@
+node_modules
+package-lock.json
+combined.log
+error.log
+.vscode
+src/server/config/index.js
