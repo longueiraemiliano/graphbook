@@ -8,6 +8,7 @@ import LoginRegisterForm from "./components/LoginRegisterForm";
 import CurrentUserQuery from "./components/Queries/currentUser";
 import "./components/FontAwesome";
 import "../../assets/css/style.css";
+import "@synapsestudios/react-drop-n-crop/lib/react-drop-n-crop.min.css";
 
 class App extends Component {
   state = {

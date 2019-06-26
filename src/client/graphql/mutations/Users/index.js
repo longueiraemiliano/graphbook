@@ -15,3 +15,12 @@ export const SIGNUP = gql`
     }
   }
 `;
+
+export const UPLOAD_AVATAR = gql`
+  mutation uploadAvatar($file: Upload!) {
+    uploadAvatar(file: $file) {
+      filename
+      url
+    }
+  }
+`;

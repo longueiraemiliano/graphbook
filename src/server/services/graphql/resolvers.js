@@ -2,6 +2,13 @@ import logger from "../../helpers/logger";
 import Sequelize from "sequelize";
 import bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";
+import aws from "aws-sdk";
+
+const s3 = new aws.S3({
+  signatureVersion: "v4",
+  region: "us-east-2"
+});
+
 const { JWT_SECRET } = process.env;
 
 function resolvers() {
@@ -278,6 +285,34 @@ function resolvers() {
               });
             });
           }
+        });
+      },
+      async uploadAvatar(root, { file }, context) {
+        const { stream, filename, mimetype, encoding } = await file;
+        const bucket = "emigraphbook";
+        const params = {
+          Bucket: bucket,
+          Key: context.user.id + "/" + filename,
+          ACL: "public-read",
+          Body: stream
+        };
+
+        const response = await s3.upload(params).promise();
+
+        return User.update(
+          {
+            avatar: response.Location
+          },
+          {
+            where: {
+              id: context.user.id
+            }
+          }
+        ).then(() => {
+          return {
+            filename: filename,
+            url: response.Location
+          };
         });
       }
     }
