@@ -21,3 +21,14 @@ export const GET_CURRENT_USER = gql`
     }
   }
 `;
+
+export const GET_USER = gql`
+  query user($username: String!) {
+    user(username: $username) {
+      id
+      email
+      username
+      avatar
+    }
+  }
+`;

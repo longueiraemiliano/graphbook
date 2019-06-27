@@ -24,27 +24,30 @@ class ChatList extends Component {
   }
 
   render() {
-    const { chats, openChat } = this.props;
+    const { chats, openChat, currentUser } = this.props;
+    return chats.map((chat, i) => {
+      const chatingTo = chat.users.find(user => user.id !== currentUser.id);
 
-    return chats.map((chat, i) => (
-      <div
-        key={"chat" + chat.id}
-        className="chat"
-        onClick={() => openChat(chat.id)}
-      >
-        <div className="header">
-          <img
-            src={
-              chat.users.length > 2 ? "/public/group.png" : chat.users[1].avatar
-            }
-          />
-          <div>
-            <h2>{this.shorten(this.usernamesToString(chat.users))}</h2>
-            <span>{this.shorten(chat.lastMessage.text)}</span>
+      return (
+        <div
+          key={"chat" + chat.id}
+          className="chat"
+          onClick={() => openChat(chat.id)}
+        >
+          <div className="header">
+            <img
+              src={
+                chat.users.length > 2 ? "/public/group.png" : chatingTo.avatar
+              }
+            />
+            <div>
+              <h2>{this.shorten(chatingTo.username)}</h2>
+              <span>{this.shorten(chat.lastMessage.text)}</span>
+            </div>
           </div>
         </div>
-      </div>
-    ));
+      );
+    });
   }
 }
 

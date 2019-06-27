@@ -4,13 +4,13 @@ import ChatInput from "./ChatInput";
 
 export default class ChatWindow extends Component {
   render() {
-    const self = this;
-    const { chat, closeChat } = this.props;
+    const { chat, closeChat, currentUser } = this.props;
+    const chatingTo = chat.users.find(user => user.id !== currentUser.id);
 
     return (
       <div className="chatWindow">
         <div className="header">
-          <span>{chat.users[1].username}</span>
+          <span>{chatingTo.username}</span>
           <button onClick={closeChat} className="close">
             X
           </button>

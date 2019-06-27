@@ -76,7 +76,7 @@ function resolvers() {
           ]
         });
       },
-      postsFeed(root, { page, limit }, context) {
+      postsFeed(root, { page, limit, username }, context) {
         var skip = 0;
 
         if (page && limit) {
@@ -90,6 +90,11 @@ function resolvers() {
 
         if (limit) {
           query.limit = limit;
+        }
+
+        if (typeof username !== typeof undefined) {
+          query.include = [{ model: User }];
+          query.where = { "$User.username$": username };
         }
 
         return {
@@ -130,6 +135,13 @@ function resolvers() {
       },
       currentUser(root, args, context) {
         return context.user;
+      },
+      user(root, { username }, context) {
+        return User.findOne({
+          where: {
+            username: username
+          }
+        });
       }
     },
     RootMutation: {
@@ -139,15 +151,11 @@ function resolvers() {
           message: "Post was created"
         });
 
-        return User.findAll().then(users => {
-          const usersRow = users[0];
-
-          return Post.create({
-            ...post
-          }).then(newPost => {
-            return Promise.all([newPost.setUser(usersRow.id)]).then(() => {
-              return newPost;
-            });
+        return Post.create({
+          ...post
+        }).then(newPost => {
+          return Promise.all([newPost.setUser(context.user.id)]).then(() => {
+            return newPost;
           });
         });
       },
@@ -169,18 +177,14 @@ function resolvers() {
           message: "Message was created"
         });
 
-        return User.findAll().then(users => {
-          const usersRow = users[0];
-
-          return Message.create({
-            ...message
-          }).then(newMessage => {
-            return Promise.all([
-              newMessage.setUser(usersRow.id),
-              newMessage.setChat(message.chatId)
-            ]).then(() => {
-              return newMessage;
-            });
+        return Message.create({
+          ...message
+        }).then(newMessage => {
+          return Promise.all([
+            newMessage.setUser(context.user.id),
+            newMessage.setChat(message.chatId)
+          ]).then(() => {
+            return newMessage;
           });
         });
       },

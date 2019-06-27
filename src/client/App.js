@@ -1,11 +1,7 @@
 import React, { Component } from "react";
 import { Helmet } from "react-helmet";
 import { withApollo } from "react-apollo";
-import Feed from "./Feed";
-import Chats from "./Chats";
-import Bar from "./components/Bar";
-import LoginRegisterForm from "./components/LoginRegisterForm";
-import CurrentUserQuery from "./components/Queries/currentUser";
+import Routing from "./Routing";
 import "./components/FontAwesome";
 import "../../assets/css/style.css";
 import "@synapsestudios/react-drop-n-crop/lib/react-drop-n-crop.min.css";
@@ -46,15 +42,10 @@ class App extends Component {
             content="Newsfeed of all your friends on Graphbook"
           />
         </Helmet>
-        {this.state.loggedIn ? (
-          <CurrentUserQuery>
-            <Bar changeLoginState={this.changeLoginState} />
-            <Feed />
-            <Chats />
-          </CurrentUserQuery>
-        ) : (
-          <LoginRegisterForm changeLoginState={this.changeLoginState} />
-        )}
+        <Routing
+          loggedIn={this.state.loggedIn}
+          changeLoginState={this.changeLoginState}
+        />
       </div>
     );
   }

@@ -34,18 +34,21 @@ export default class Chats extends Component {
   render() {
     const self = this;
     const { openChats } = this.state;
-
+    const { currentUser } = this.props;
     return (
       <div className="wrapper">
         <div className="chats">
           <ChatsQuery>
-            <ChatsLists openChat={self.openChat} />
+            <ChatsLists currentUser={currentUser} openChat={self.openChat} />
           </ChatsQuery>
         </div>
         <div className="openChats">
           {openChats.map((chatId, i) => (
             <ChatQuery key={"chatWindow" + chatId} chatId={chatId}>
-              <ChatWindow closeChat={self.closeChat} />
+              <ChatWindow
+                currentUser={currentUser}
+                closeChat={self.closeChat}
+              />
             </ChatQuery>
           ))}
         </div>

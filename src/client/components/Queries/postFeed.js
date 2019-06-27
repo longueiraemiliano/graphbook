@@ -19,6 +19,9 @@ export default class PostsFeedQuery extends Component {
       if (typeof variables.limit !== typeof undefined) {
         query_variables.limit = variables.limit;
       }
+      if (typeof variables.username !== typeof undefined) {
+        query_variables.username = variables.username;
+      }
     }
 
     return query_variables;
