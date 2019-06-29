@@ -255,6 +255,18 @@ function resolvers() {
               expiresIn: "1d"
             });
 
+            const cookieExpiration = 1;
+            var expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + cookieExpiration);
+
+            context.cookies.set("authorization", token, {
+              signed: true,
+              expires: expirationDate,
+              httpOnly: true,
+              secure: false,
+              sameSite: "strict"
+            });
+
             return {
               token
             };
@@ -283,6 +295,21 @@ function resolvers() {
                 const token = JWT.sign({ email, id: newUser.id }, JWT_SECRET, {
                   expiresIn: "1d"
                 });
+
+                const cookieExpiration = 1;
+                var expirationDate = new Date();
+                expirationDate.setDate(
+                  expirationDate.getDate() + cookieExpiration
+                );
+
+                context.cookies.set("authorization", token, {
+                  signed: true,
+                  expires: expirationDate,
+                  httpOnly: true,
+                  secure: false,
+                  sameSite: "strict"
+                });
+
                 return {
                   token
                 };
@@ -318,6 +345,18 @@ function resolvers() {
             url: response.Location
           };
         });
+      },
+      logout(root, params, context) {
+        context.cookies.set("authorization", "", {
+          signed: true,
+          expires: new Date(),
+          httpOnly: true,
+          secure: false,
+          sameSite: "strict"
+        });
+        return {
+          message: true
+        };
       }
     }
   };

@@ -16,6 +16,14 @@ export const SIGNUP = gql`
   }
 `;
 
+export const LOGOUT = gql`
+  mutation logout {
+    logout {
+      success
+    }
+  }
+`;
+
 export const UPLOAD_AVATAR = gql`
   mutation uploadAvatar($file: Upload!) {
     uploadAvatar(file: $file) {

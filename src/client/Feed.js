@@ -3,7 +3,6 @@ import AddPostMutation from "./components/Mutations/addPost";
 import FeedList from "./components/Post/FeedList";
 import PostForm from "./components/Post/Form";
 import PostsFeedQuery from "./components/Queries/postFeed";
-import "../../assets/css/style.css";
 
 export default class App extends Component {
   state = {

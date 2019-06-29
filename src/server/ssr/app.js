@@ -1,28 +1,13 @@
 import React, { Component } from "react";
 import { Helmet } from "react-helmet";
 import { withApollo } from "react-apollo";
-import Routing from "./Routing";
-import "./components/FontAwesome";
-import "../../assets/css/style.css";
-import "@synapsestudios/react-drop-n-crop/lib/react-drop-n-crop.min.css";
+import "../../client/components/FontAwesome";
+import Routing from "../../client/Routing";
 
 class App extends Component {
   state = {
-    loggedIn:
-      typeof window.__APOLLO_STATE__ !== typeof undefined &&
-      typeof window.__APOLLO_STATE__.ROOT_QUERY !== typeof undefined &&
-      typeof window.__APOLLO_STATE__.ROOT_QUERY.currentUser !== typeof undefined
+    loggedIn: this.props.loggedIn
   };
-
-  constructor(props) {
-    super(props);
-    this.unsubscribe = props.client.onResetStore(() =>
-      this.changeLoginState(false)
-    );
-  }
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
 
   changeLoginState = loggedIn => {
     this.setState({ loggedIn });
@@ -30,7 +15,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div>
         <Helmet>
           <title>Graphbook - Feed</title>
           <meta
@@ -41,6 +26,8 @@ class App extends Component {
         <Routing
           loggedIn={this.state.loggedIn}
           changeLoginState={this.changeLoginState}
+          location={this.props.location}
+          context={this.props.context}
         />
       </div>
     );

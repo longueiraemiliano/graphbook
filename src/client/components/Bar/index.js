@@ -4,6 +4,7 @@ import UserBar from "./UserBar";
 import { UserConsumer } from "../context/user";
 import Logout from "./Logout";
 import Home from "./Home";
+import LogoutMutation from "../Mutations/logout";
 
 export default class Bar extends Component {
   render() {
@@ -17,7 +18,9 @@ export default class Bar extends Component {
         </div>
         <div className="buttons">
           <Home />
-          <Logout changeLoginState={this.props.changeLoginState} />
+          <LogoutMutation>
+            <Logout changeLoginState={this.props.changeLoginState} />
+          </LogoutMutation>
         </div>
       </div>
     );
