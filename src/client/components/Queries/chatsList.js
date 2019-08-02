@@ -23,7 +23,7 @@ export default class ChatsQuery extends Component {
           const { chats } = data;
 
           return React.Children.map(children, child => {
-            return React.cloneElement(child, { chats });
+            return React.cloneElement(child, { chats, subscribeToMore });
           });
         }}
       </Query>
