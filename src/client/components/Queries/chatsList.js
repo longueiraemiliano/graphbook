@@ -10,7 +10,7 @@ export default class ChatsQuery extends Component {
 
     return (
       <Query query={GET_CHATS}>
-        {({ loading, error, data }) => {
+        {({ loading, error, data, subscribeToMore }) => {
           if (loading) return <Loading />;
           if (error) {
             return (

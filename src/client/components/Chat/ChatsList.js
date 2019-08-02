@@ -1,6 +1,78 @@
 import React, { Component } from "react";
+import gql from "graphql-tag";
+import { withApollo } from "react-apollo";
+import { GET_CHAT } from "../../graphql/queries/Chats";
+
+const MESSAGES_SUBSCRIPTION = gql`
+  subscription onMessageAdded {
+    messageAdded {
+      id
+      text
+      chat {
+        id
+      }
+      user {
+        id
+        __typename
+      }
+      __typename
+    }
+  }
+`;
 
 class ChatList extends Component {
+  componentDidMount() {
+    this.subscribeToNewMessages();
+  }
+
+  subscribeToNewMessages = () => {
+    const self = this;
+    const { user } = this.props;
+    this.props.subscribeToMore({
+      document: MESSAGES_SUBSCRIPTION,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data || !prev.chats.length) return prev;
+
+        var index = -1;
+        for (var i = 0; i < prev.chats.length; i++) {
+          if (prev.chats[i].id == subscriptionData.data.messageAdded.chat.id) {
+            index = i;
+            break;
+          }
+        }
+
+        if (index === -1) return prev;
+
+        const newValue = Object.assign({}, prev.chats[i], {
+          lastMessage: {
+            text: subscriptionData.data.messageAdded.text,
+            __typename: subscriptionData.data.messageAdded.__typename
+          }
+        });
+
+        var newList = { chats: [...prev.chats] };
+        newList.chats[i] = newValue;
+
+        try {
+          const data = self.props.client.store.cache.readQuery({
+            query: GET_CHAT,
+            variables: { chatId: subscriptionData.data.messageAdded.chat.id }
+          });
+          if (user.id !== subscriptionData.data.messageAdded.user.id) {
+            data.chat.messages.push(subscriptionData.data.messageAdded);
+            self.props.client.store.cache.writeQuery({
+              query: GET_CHAT,
+              variables: { chatId: subscriptionData.data.messageAdded.chat.id },
+              data
+            });
+          }
+        } catch (e) {}
+
+        return newList;
+      }
+    });
+  };
+
   usernamesToString(users) {
     const userList = users.slice(1);
     var usernamesString = "";
@@ -51,4 +123,4 @@ class ChatList extends Component {
   }
 }
 
-export default ChatList;
+export default withApollo(ChatList);

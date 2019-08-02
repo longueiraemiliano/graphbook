@@ -13,6 +13,8 @@ import template from "./ssr/template";
 import { Helmet } from "react-helmet";
 import Cookies from "cookies";
 import JWT from "jsonwebtoken";
+import { createServer } from "http";
+
 const { JWT_SECRET } = process.env;
 const utils = {
   db
@@ -20,6 +22,7 @@ const utils = {
 const services = servicesLoader(utils);
 const root = path.join(__dirname, "../../");
 const app = express();
+const server = createServer(app);
 
 if (process.env.NODE_ENV === "production") {
   app.use(helmet());
@@ -56,12 +59,29 @@ app.use((req, res, next) => {
   next();
 });
 const serviceNames = Object.keys(services);
+// for (let i = 0; i < serviceNames.length; i += 1) {
+//   const name = serviceNames[i];
+//   if (name === "graphql") {
+//     services[name].applyMiddleware({ app });
+//   } else {
+//     app.use(`/${name}`, services[name]);
+//   }
+// }
 for (let i = 0; i < serviceNames.length; i += 1) {
   const name = serviceNames[i];
-  if (name === "graphql") {
-    services[name].applyMiddleware({ app });
-  } else {
-    app.use(`/${name}`, services[name]);
+  switch (name) {
+    case "graphql":
+      services[name].applyMiddleware({ app });
+      break;
+    case "subscriptions":
+      server.listen(8000, () => {
+        console.log("Listening on port 8000!");
+        services[name](server);
+      });
+      break;
+    default:
+      app.use(`/${name}`, services[name]);
+      break;
   }
 }
 
@@ -97,4 +117,4 @@ app.get("*", async (req, res) => {
   });
 });
 
-app.listen(8000, () => console.log("Listening on port 8000!"));
+// app.listen(8000, () => console.log("Listening on port 8000!"));

@@ -3,6 +3,9 @@ import Sequelize from "sequelize";
 import bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";
 import aws from "aws-sdk";
+import { PubSub, withFilter } from "graphql-subscriptions";
+
+const pubsub = new PubSub();
 
 const s3 = new aws.S3({
   signatureVersion: "v4",
@@ -184,6 +187,7 @@ function resolvers() {
             newMessage.setUser(context.user.id),
             newMessage.setChat(message.chatId)
           ]).then(() => {
+            pubsub.publish("messageAdded", { messageAdded: newMessage });
             return newMessage;
           });
         });
@@ -357,6 +361,11 @@ function resolvers() {
         return {
           message: true
         };
+      }
+    },
+    RootSubscription: {
+      messageAdded: {
+        subscribe: () => pubsub.asyncIterator(["messageAdded"])
       }
     }
   };
