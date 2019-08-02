@@ -15,6 +15,10 @@ import Cookies from "cookies";
 import JWT from "jsonwebtoken";
 import { createServer } from "http";
 
+if (process.pid) {
+  console.log(`This process is your pid ${process.pid}`);
+}
+
 const { JWT_SECRET } = process.env;
 const utils = {
   db
