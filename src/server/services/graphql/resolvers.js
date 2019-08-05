@@ -187,7 +187,23 @@ function resolvers() {
             newMessage.setUser(context.user.id),
             newMessage.setChat(message.chatId)
           ]).then(() => {
-            pubsub.publish("messageAdded", { messageAdded: newMessage });
+            Chat.findOne({
+              where: {
+                id: newMessage.chatId
+              },
+              include: [
+                {
+                  model: User,
+                  required: true,
+                  through: "users_chats"
+                }
+              ]
+            }).then(chat => {
+              pubsub.publish("messageAdded", {
+                messageAdded: newMessage,
+                chat
+              });
+            });
             return newMessage;
           });
         });
@@ -365,7 +381,32 @@ function resolvers() {
     },
     RootSubscription: {
       messageAdded: {
-        subscribe: () => pubsub.asyncIterator(["messageAdded"])
+        subscribe: withFilter(
+          () => pubsub.asyncIterator(["messageAdded"]),
+          (payload, variables, context) => {
+            if (payload.chat.Users.find(u => u.id === context.user.id)) {
+              return Chat.findOne({
+                where: {
+                  id: payload.messageAdded.ChatId
+                },
+                include: [
+                  {
+                    model: User,
+                    required: true,
+                    through: "users_chats"
+                  }
+                ]
+              }).then(chat => {
+                if (chat !== null) {
+                  return true;
+                }
+                return false;
+              });
+            } else {
+              return false;
+            }
+          }
+        )
       }
     }
   };

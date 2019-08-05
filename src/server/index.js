@@ -63,14 +63,6 @@ app.use((req, res, next) => {
   next();
 });
 const serviceNames = Object.keys(services);
-// for (let i = 0; i < serviceNames.length; i += 1) {
-//   const name = serviceNames[i];
-//   if (name === "graphql") {
-//     services[name].applyMiddleware({ app });
-//   } else {
-//     app.use(`/${name}`, services[name]);
-//   }
-// }
 for (let i = 0; i < serviceNames.length; i += 1) {
   const name = serviceNames[i];
   switch (name) {
@@ -91,6 +83,7 @@ for (let i = 0; i < serviceNames.length; i += 1) {
 
 app.get("*", async (req, res) => {
   const token = req.cookies.get("authorization", { signed: true });
+  console.log(`hi!! ${token}`);
   var loggedIn;
   try {
     await JWT.verify(token, JWT_SECRET);
@@ -120,5 +113,3 @@ app.get("*", async (req, res) => {
     }
   });
 });
-
-// app.listen(8000, () => console.log("Listening on port 8000!"));

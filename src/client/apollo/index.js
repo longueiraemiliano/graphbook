@@ -11,12 +11,12 @@ const protocol = location.protocol != "https:" ? "ws://" : "wss://";
 const port = location.port ? ":" + location.port : "";
 
 const httpLink = createUploadLink({
-  uri: location.protocol + "//" + location.hostname + port + "/graphql",
+  uri: location.protocol + "//" + location.hostname + ":8000" + "/graphql",
   credentials: "same-origin"
 });
 
 const SUBSCRIPTIONS_ENDPOINT =
-  protocol + location.hostname + port + "/subscriptions";
+  protocol + location.hostname + ":8000" + "/subscriptions";
 
 const subClient = new SubscriptionClient(SUBSCRIPTIONS_ENDPOINT, {
   reconnect: true,
