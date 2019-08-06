@@ -384,7 +384,15 @@ function resolvers() {
         subscribe: withFilter(
           () => pubsub.asyncIterator(["messageAdded"]),
           (payload, variables, context) => {
-            if (payload.chat.Users.find(u => u.id === context.user.id)) {
+            if (
+              context &&
+              context.user &&
+              context.user.id &&
+              payload.chat &&
+              payload.chat.Users &&
+              payload.chat.Users.length &&
+              payload.chat.Users.find(u => u.id === context.user.id)
+            ) {
               return Chat.findOne({
                 where: {
                   id: payload.messageAdded.ChatId
