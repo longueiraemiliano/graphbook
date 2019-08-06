@@ -10,7 +10,7 @@ export default class ChatsQuery extends Component {
 
     return (
       <Query query={GET_CHAT} variables={{ chatId }}>
-        {({ loading, error, data }) => {
+        {({ loading, error, data, subscribeToMore }) => {
           if (loading) return <Loading />;
           if (error) {
             return (
@@ -23,7 +23,7 @@ export default class ChatsQuery extends Component {
           const { chat } = data;
 
           return React.Children.map(children, child => {
-            return React.cloneElement(child, { chat });
+            return React.cloneElement(child, { chat, subscribeToMore });
           });
         }}
       </Query>

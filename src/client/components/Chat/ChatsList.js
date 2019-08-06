@@ -1,24 +1,7 @@
 import React, { Component } from "react";
-import gql from "graphql-tag";
 import { withApollo } from "react-apollo";
 import { GET_CHAT } from "../../graphql/queries/Chats";
-
-const MESSAGES_SUBSCRIPTION = gql`
-  subscription onMessageAdded {
-    messageAdded {
-      id
-      text
-      chat {
-        id
-      }
-      user {
-        id
-        __typename
-      }
-      __typename
-    }
-  }
-`;
+import { MESSAGES_SUBSCRIPTION } from "../../graphql/subscriptions/Chats";
 
 class ChatList extends Component {
   componentDidMount() {
