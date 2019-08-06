@@ -10,7 +10,7 @@ class ChatList extends Component {
 
   subscribeToNewMessages = () => {
     const self = this;
-    const { user } = this.props;
+    const { currentUser } = this.props;
     this.props.subscribeToMore({
       document: MESSAGES_SUBSCRIPTION,
       updateQuery: (prev, { subscriptionData }) => {
@@ -41,7 +41,7 @@ class ChatList extends Component {
             query: GET_CHAT,
             variables: { chatId: subscriptionData.data.messageAdded.chat.id }
           });
-          if (user.id !== subscriptionData.data.messageAdded.user.id) {
+          if (currentUser.id !== subscriptionData.data.messageAdded.user.id) {
             data.chat.messages.push(subscriptionData.data.messageAdded);
             self.props.client.store.cache.writeQuery({
               query: GET_CHAT,
