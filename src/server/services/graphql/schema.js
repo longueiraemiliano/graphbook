@@ -1,5 +1,16 @@
-const typeDefinitions = `
+const typeDefinitions = `  
   directive @auth on QUERY | FIELD_DEFINITION | FIELD
+
+  enum CacheControlScope {
+    PUBLIC
+    PRIVATE
+  }
+
+  directive @cacheControl (
+    maxAge: Int
+    scope: CacheControlScope
+  ) on FIELD_DEFINITION | OBJECT | INTERFACE
+
   scalar Upload
 
   type Post {
@@ -8,9 +19,9 @@ const typeDefinitions = `
     user: User
   }
 
-  type User {
+  type User @cacheControl(maxAge: 120) {
     id: Int
-    avatar: String
+    avatar: String @cacheControl(maxAge: 240)
     username: String
     email: String
   }
