@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PostHeader from "./Header";
 import PostContent from "./Content";
 import PostForm from "./Form";
-import UpdatePostMutation from "../mutations/updatePost";
+import UpdatePostMutation from "../Mutations/updatePost";
 
 export default class Post extends Component {
   state = {

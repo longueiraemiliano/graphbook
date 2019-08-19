@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import UsersSearchQuery from "../queries/searchQuery";
+import UsersSearchQuery from "../Queries/searchQuery";
 import SearchList from "./SearchList";
 
 export default class SearchBar extends Component {

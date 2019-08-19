@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Dropdown from "../helpers/dropdown";
-import DeletePostMutation from "../mutations/deletePost";
+import DeletePostMutation from "../Mutations/deletePost";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const DeleteButton = ({ deletePost, postId }) => (

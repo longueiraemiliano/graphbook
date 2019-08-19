@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Query } from "react-apollo";
-import Loading from "../loading";
-import Error from "../error";
+import Loading from "../Loading";
+import Error from "../Error";
 import { GET_USERS } from "../../graphql/queries/Users";
 
 export default class UsersSearchQuery extends Component {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import loadable from "react-loadable";
-import Loading from "./components/loading";
+import Loading from "./components/Loading";
 const User = loadable({
   loader: () => import("./User"),
   loading: Loading

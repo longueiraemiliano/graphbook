@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import UploadAvatarMutation from "../mutations/uploadAvatar";
+import UploadAvatarMutation from "../Mutations/uploadAvatar";
 import AvatarUpload from "../AvatarModal";
 
 export default class UserBar extends Component {

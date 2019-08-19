@@ -4,8 +4,8 @@ import ChatsLists from "./components/Chat/ChatsList";
 import ChatWindow from "./components/Chat/ChatWindow";
 import ChatsQuery from "./components/Queries/chatsList";
 import ChatQuery from "./components/Queries/chat";
-import MessageAddedSubscription from "./components/subscriptions/messageAdded";
-import ChatNotification from "./components/chat/notification";
+import MessageAddedSubscription from "./components/Subscriptions/messageAdded";
+import ChatNotification from "./components/Chat/Notification";
 
 export default class Chats extends Component {
   state = {

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import UserProfile from "./components/user";
+import UserProfile from "./components/User";
 import Chats from "./Chats";
 import Bar from "./components/Bar";
-import CurrentUserQuery from "./components/queries/currentUser";
+import CurrentUserQuery from "./components/Queries/currentUser";
 
 export default class User extends Component {
   render() {

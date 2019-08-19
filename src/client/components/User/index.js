@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import PostsQuery from "../queries/postFeed";
-import FeedList from "../post/FeedList";
+import PostsQuery from "../Queries/postFeed";
+import FeedList from "../Post/FeedList";
 import UserHeader from "./header";
-import UserQuery from "../queries/userQuery";
+import UserQuery from "../Queries/userQuery";
 
 export default class UserProfile extends Component {
   render() {
