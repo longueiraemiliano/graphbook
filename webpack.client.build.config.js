@@ -1,3 +1,4 @@
+const { ReactLoadablePlugin } = require("react-loadable/webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
@@ -9,7 +10,9 @@ module.exports = {
   entry: "./src/client/index.js",
   output: {
     path: path.join(__dirname, outputDirectory),
-    filename: "bundle.js"
+    filename: "bundle.js",
+    publicPath: "/",
+    chunkFilename: "[name].[chunkhash].js"
   },
   module: {
     rules: [
@@ -38,8 +41,8 @@ module.exports = {
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [path.join(__dirname, buildDirectory)]
     }),
-    new HtmlWebpackPlugin({
-      template: "./public/index.html"
+    new ReactLoadablePlugin({
+      filename: "./dist/react-loadable.json"
     }),
     new MiniCssExtractPlugin({
       filename: "bundle.css"

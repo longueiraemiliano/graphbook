@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/server";
 
-export default function htmlTemplate(content, head, state) {
+export default function htmlTemplate(content, head, state, bundles) {
   return `
     <html lang="en">
       <head>
@@ -31,6 +31,9 @@ export default function htmlTemplate(content, head, state) {
             }}
           />
         )}
+        ${bundles
+          .map(bundle => `<script src="${bundle.publicPath}"></script>`)
+          .join("\n")}
         <script src="/bundle.js"></script>
       </body>
     </html>

@@ -6,7 +6,7 @@ import { HttpLink } from "apollo-link-http";
 import fetch from "node-fetch";
 import { createPersistedQueryLink } from "apollo-link-persisted-queries";
 
-export default req => {
+export default (req, loggedIn) => {
   const AuthLink = (operation, next) => {
     if (loggedIn) {
       operation.setContext(context => ({
@@ -51,7 +51,7 @@ export default req => {
       }),
       InfoLink,
       AuthLink,
-      createPersistedQueryLink.concat(
+      createPersistedQueryLink().concat(
         new HttpLink({
           uri: "http://localhost:8000/graphql",
           credentials: "same-origin",

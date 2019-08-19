@@ -13,13 +13,13 @@ const port = location.port ? ":" + location.port : "";
 
 const httpLink = createPersistedQueryLink().concat(
   createUploadLink({
-    uri: location.protocol + "//" + location.hostname + ":8000" + "/graphql",
+    uri: location.protocol + "//" + location.hostname + port + "/graphql",
     credentials: "same-origin"
   })
 );
 
 const SUBSCRIPTIONS_ENDPOINT =
-  protocol + location.hostname + ":8000" + "/subscriptions";
+  protocol + location.hostname + port + "/subscriptions";
 
 const subClient = new SubscriptionClient(SUBSCRIPTIONS_ENDPOINT, {
   reconnect: true,

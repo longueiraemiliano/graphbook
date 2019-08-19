@@ -5,7 +5,7 @@ import Schema from "./schema";
 import auth from "./auth";
 import JWT from "jsonwebtoken";
 const { JWT_SECRET, ENGINE_API_KEY } = process.env;
-console.log(ENGINE_API_KEY);
+
 export default utils => {
   const executableSchema = makeExecutableSchema({
     typeDefs: Schema,
