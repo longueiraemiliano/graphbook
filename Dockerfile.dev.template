@@ -1,0 +1,15 @@
+FROM node:10
+WORKDIR /usr/src/app
+COPY . .
+RUN npm install
+ENV ENGINE_KEY=ENGINE_KEY
+ENV NODE_ENV=development
+ENV JWT_SECRET=JWT_SECRET
+ENV AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID
+ENV AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY
+ENV username=username
+ENV password=password
+ENV database=graphbook_dev
+ENV host=172.17.0.1
+EXPOSE 8000
+CMD [ "npm", "run", "server:docker" ]

@@ -9,6 +9,7 @@
     "stats": "webpack --profile --json --config webpack.client.build.config.js > stats.json",
     "analyze": "webpack-bundle-analyzer stats.json",
     "server": "nodemon --exec babel-node --plugins require-context-hook,dynamic-import-node --watch src/server -r node_modules/dotenv/config src/server/index.js",
+    "server:docker": "nodemon --exec babel-node --plugins require-context-hook,dynamic-import-node --watch src/server src/server/index.js",
     "test": "npm run build && mocha --exit test/ --require babel-hook --require @babel/polyfill --recursive",
     "build": "npm run client:build && npm run server:build",
     "server:build": "webpack --config webpack.server.build.config.js",

@@ -4,7 +4,7 @@ import Resolvers from "./resolvers";
 import Schema from "./schema";
 import auth from "./auth";
 import JWT from "jsonwebtoken";
-const { JWT_SECRET, ENGINE_API_KEY } = process.env;
+const { JWT_SECRET, ENGINE_KEY } = process.env;
 
 export default utils => {
   const executableSchema = makeExecutableSchema({
@@ -19,7 +19,7 @@ export default utils => {
     schema: executableSchema,
     introspection: true,
     engine: {
-      apiKey: ENGINE_API_KEY,
+      apiKey: ENGINE_KEY,
       generateClientInfo: ({ request }) => {
         const headers = request.http.headers;
         const clientName = headers.get("apollo-client-name");
